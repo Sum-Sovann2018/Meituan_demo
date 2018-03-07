@@ -1,0 +1,68 @@
+@font-face {
+  font-family: 'Meituan';
+  src:  url('../fonts/Meituan.eot?bc38qt');
+  src:  url('../fonts/Meituan.eot?bc38qt#iefix') format('embedded-opentype'),
+    url('../fonts/Meituan.ttf?bc38qt') format('truetype'),
+    url('../fonts/Meituan.woff?bc38qt') format('woff'),
+    url('../fonts/Meituan.svg?bc38qt#Meituan') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="mt-"], [class*=" mt-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'Meituan' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mt-add_circle:before {
+  content: "\e900";
+}
+.mt-arrow_left:before {
+  content: "\e901";
+}
+.mt-check_circle:before {
+  content: "\e902";
+}
+.mt-close:before {
+  content: "\e903";
+}
+.mt-favorite:before {
+  content: "\e904";
+}
+.mt-keyboard_arrow_right:before {
+  content: "\e905";
+}
+.mt-remove_circle_outline:before {
+  content: "\e906";
+}
+.mt-shopping_cart:before {
+  content: "\e907";
+}
+.mt-thumb_down:before {
+  content: "\e908";
+}
+.mt-thumb_up:before {
+  content: "\e909";
+}
+.mt-search:before {
+  content: "\e986";
+}
+.mt-star-empty:before {
+  content: "\e9d7";
+}
+.mt-star-half:before {
+  content: "\e9d8";
+}
+.mt-star-full:before {
+  content: "\e9d9";
+}
