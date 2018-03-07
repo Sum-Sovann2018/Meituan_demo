@@ -3,13 +3,13 @@
     <!-- 左边导航边栏 -->
     <div class="side-nav" ref="orderSideNav">
       <ul class="nav">
-        <li class="item" :class="getScrollToIndex === 0? 'active' : ''">
+        <li class="item" :class="getScrollToIndex === 0? 'active' : ''" @click="scrollToPosition(0)">
           <p>
             <img :src="promo.tag_icon" class="icon" v-if="promo.tag_icon"/>
             {{ promo.tag_name }}
           </p>
         </li>
-        <li class="item" v-for="item in food_spu" :key="item.id">
+        <li class="item" v-for="(item, index) in food_spu" :key="item.id" :class="getScrollToIndex === index+1? 'active' : ''" @click="scrollToPosition(index+1)">
           <p>
             <img :src="item.icon" class="icon" v-if="item.icon"/>
             {{ item.name }}
@@ -76,6 +76,8 @@ export default {
       // init objs to save better-scroll objs
       foodScroll: {},
       menuScroll: {},
+      foodScrollY: 0,
+      menuScrollY: 0,
       // height refs
       heightRnages: [0],
     }
@@ -89,26 +91,26 @@ export default {
       let sideNav = this.$refs.orderSideNav;
       let contentWrapper = this.$refs.orderContentWrapper;
 
+      // 初始化BS实例
       this.menuScroll = new BScroll(sideNav, {
-        probeType: 3
+        probeType: 3,
+        click: true,
       });
-
       this.foodScroll = new BScroll(contentWrapper, {
-        probeType: 3
+        probeType: 3,
+        click: true,
       });
 
+      // 绑定scroll事件
       this.menuScroll.on('scroll', (pos) => {
-        // console.log(pos.y);
-        this.menuScroll.y = Math.abs(Math.round(pos.y));
+        this.menuScrollY = Math.abs(Math.round(pos.y));
       });
-
       this.foodScroll.on('scroll', (pos) => {
-        // console.log(pos.y);
-        this.foodScroll.y = Math.abs(Math.round(pos.y));
+        this.foodScrollY = Math.abs(Math.round(pos.y));
       });
     },
     calcListItemHeightRanges() {
-      // Get the DOM collection of the list item
+      // 获取DOM列表
       let foodItemsList = this.$refs.orderContentWrapper.getElementsByClassName('list-item-hook');
       let heightRange = 0;
 
@@ -122,22 +124,20 @@ export default {
         // save to heightRanges list
         this.heightRnages.push(heightRange);
       }
-
-      console.log(this.heightRnages);
     },
-    scrollToPosition() {
-
+    scrollToPosition(index) {
+      let foodItemsList = this.$refs.orderContentWrapper.getElementsByClassName('list-item-hook');
+      // 使用better-scroll的scrollToElement方法
+      this.foodScroll.scrollToElement(foodItemsList[index], 250);
     },
   },
   computed: {
     getScrollToIndex() {
-      console.log(this.foodScroll.y);
-
-      // for(let i=0; i<this.heightRnages.length; i++) {
-      //   if(this.foodScroll.y >= this.heightRnages[i] && this.foodScroll.y < this.heightRnages[i]) {
-      //     return i;
-      //   }
-      // }
+      for(let i=0; i<this.heightRnages.length; i++) {
+        if(this.foodScrollY >= this.heightRnages[i] && this.foodScrollY < this.heightRnages[i+1]) {
+          return i;
+        }
+      }
     }
   },
   created() {
@@ -156,13 +156,12 @@ export default {
 
           // 为了确保DOM已经完全渲染, 在$nextTick的回调函数中加载BScroll初始项.
           that.$nextTick(() => {
+
             // better-scroll 初始化
             that.initScroll();
 
             // 获取list item 高度区间
             that.calcListItemHeightRanges();
-
-            // 通过区间来判断位置
 
           });
         }
@@ -181,7 +180,7 @@ export default {
   position: relative;
   width: 85px;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   .nav {
     display: block;
@@ -233,7 +232,7 @@ export default {
 .content-wrapper {
   flex: 0 1 auto;
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   ul {
     // 专场内容
