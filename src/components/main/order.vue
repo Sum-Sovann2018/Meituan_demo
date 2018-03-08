@@ -3,13 +3,13 @@
     <!-- 左边导航边栏 -->
     <div class="side-nav" ref="orderSideNav">
       <ul class="nav">
-        <li class="item" :class="getScrollToIndex === 0? 'active' : ''" @click="scrollToPosition(0)">
+        <li class="item nav-item-hook" :class="activeMenuIndex === 0? 'active' : ''" v-if="promo" @click="scrollToPosition(0)">
           <p>
             <img :src="promo.tag_icon" class="icon" v-if="promo.tag_icon"/>
             {{ promo.tag_name }}
           </p>
         </li>
-        <li class="item" v-for="(item, index) in food_spu" :key="item.id" :class="getScrollToIndex === index+1? 'active' : ''" @click="scrollToPosition(index+1)">
+        <li class="item nav-item-hook" v-for="(item, index) in food_spu" :key="item.id" :class="activeMenuIndex === index + 1? 'active' : ''" @click="scrollToPosition(index + 1)">
           <p>
             <img :src="item.icon" class="icon" v-if="item.icon"/>
             {{ item.name }}
@@ -73,6 +73,9 @@ export default {
       // init objs to save data
       food_spu: {},
       promo: {},
+      // DOM Cache
+      foodItemsList: {},
+      navItemsList:{},
       // init objs to save better-scroll objs
       foodScroll: {},
       menuScroll: {},
@@ -80,6 +83,8 @@ export default {
       menuScrollY: 0,
       // height refs
       heightRnages: [0],
+      // active menu class
+      activeMenuIndex: 0,
     }
   },
   methods: {
@@ -90,6 +95,10 @@ export default {
 
       let sideNav = this.$refs.orderSideNav;
       let contentWrapper = this.$refs.orderContentWrapper;
+
+      // Cache DOM
+      this.foodItemsList = contentWrapper.getElementsByClassName('list-item-hook');
+      this.navItemsList = sideNav.getElementsByClassName('nav-item-hook');
 
       // 初始化BS实例
       this.menuScroll = new BScroll(sideNav, {
@@ -107,38 +116,42 @@ export default {
       });
       this.foodScroll.on('scroll', (pos) => {
         this.foodScrollY = Math.abs(Math.round(pos.y));
+        // 根据滚动位置,动态设置active menu class
+        this.activeMenuIndex = this.getScrollToIndex();
+        // 根据active menu的位置,自动滚动,保持可视
+        this.menuScroll.scrollToElement(this.navItemsList[this.activeMenuIndex - 3], 500); // 减3为了保持之前元素的可视
       });
     },
     calcListItemHeightRanges() {
-      // 获取DOM列表
-      let foodItemsList = this.$refs.orderContentWrapper.getElementsByClassName('list-item-hook');
       let heightRange = 0;
 
-      if(!foodItemsList.length) return;
+      if(!this.foodItemsList.length) return;
 
       // iterate the list and get the clientHeight of each item
-      for(let i=0; i<foodItemsList.length; i++) {
-        let elemHeight = foodItemsList[i].clientHeight;
-
+      for(let i=0; i<this.foodItemsList.length; i++) {
+        let elemHeight = this.foodItemsList[i].clientHeight;
         heightRange += elemHeight;
         // save to heightRanges list
         this.heightRnages.push(heightRange);
       }
     },
     scrollToPosition(index) {
-      let foodItemsList = this.$refs.orderContentWrapper.getElementsByClassName('list-item-hook');
       // 使用better-scroll的scrollToElement方法
-      this.foodScroll.scrollToElement(foodItemsList[index], 250);
+      this.foodScroll.scrollToElement(this.foodItemsList[index], 0);
+      // used for active menu class
+      this.activeMenuIndex = index;
     },
-  },
-  computed: {
     getScrollToIndex() {
-      for(let i=0; i<this.heightRnages.length; i++) {
+      for(let i=0; i<this.heightRnages.length - 1; i++) {
         if(this.foodScrollY >= this.heightRnages[i] && this.foodScrollY < this.heightRnages[i+1]) {
+          // return the index for class check
           return i;
         }
       }
-    }
+    },
+  },
+  computed: {
+    // 
   },
   created() {
     // 后台加载数据
@@ -191,14 +204,25 @@ export default {
 
     .item {
       display: block;
+      position: relative;
       width: 100%;
       padding: 16px 23px 15px 10px;
-      background: #eeeeee;
-      border-bottom: 1px solid rgba(140, 140, 140, 0.3);
+      background: #fafafa;
+      border-bottom: 1px solid #eeeeee;
       list-style-type: none;
 
       &.active {
         background: #fff;
+
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 2px;
+          height: 100%;
+          background: #ffbb22;
+        }
       }
 
       &:last-child {

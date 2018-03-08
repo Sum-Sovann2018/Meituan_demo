@@ -1,5 +1,5 @@
 <template>
-  <div class="nav">
+  <div class="nav-bar">
       <router-link to="/order" class="nav-item">点菜</router-link>
       <router-link to="/comment" class="nav-item">评价</router-link>
       <router-link to="/seller" class="nav-item">卖家</router-link>
@@ -14,7 +14,7 @@ export default {
 
 
 <style lang="scss">
-    .nav {
+    .nav-bar {
         display: flex;
         width: 100%;
         border-bottom: 1px solid #eeeeee;
