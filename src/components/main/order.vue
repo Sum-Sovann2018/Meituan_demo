@@ -55,6 +55,8 @@
                   </p>
                 </div>
               </div>
+              <!-- carcontrol 组件 -->
+              <CartControl class="controls" :food="item"></CartControl>
             </li>
           </ul>
         </li>
@@ -62,7 +64,7 @@
     </div>
 
     <!-- shopcart组件 -->
-    <Shopcart :poi="poi_info"></Shopcart>
+    <Shopcart :poi="poi_info" :selectedItems="selectedFoods"></Shopcart>
   </div>
 </template>
 
@@ -71,11 +73,14 @@
 import BScroll from 'better-scroll';
 
 // 导入shopcart组件
-import Shopcart from '@/components/shopcart/shopcart'
+import Shopcart from '@/components/shopcart/shopcart';
+// 导入 CarControl组件
+import CartControl from '@/components/cartcontrol/cartcontrol';
 
 export default {
   components: {
     Shopcart,
+    CartControl
   },
   data() {
     return {
@@ -162,6 +167,21 @@ export default {
   },
   computed: {
     // 
+    selectedFoods() {
+      let foods = [];
+      
+      if(this.food_spu.length) {
+        this.food_spu.forEach(category => {
+          category.spus.forEach(item => {
+            if(item.count) {
+              foods.push(item);
+            }
+          });
+        });
+      }
+      
+      return foods;
+    }
   },
   created() {
     // 后台加载数据
@@ -313,6 +333,7 @@ export default {
   // 从cate-item中调出
   .food-item {
     display: flex;
+    position: relative;
     padding: 11px;
     // border-bottom: 1px solid #eeeeee;
     align-items: center;
@@ -384,6 +405,13 @@ export default {
           }
         }
       }
+    }
+
+    // cartcontrol组件
+    .controls {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
     }
   }
   

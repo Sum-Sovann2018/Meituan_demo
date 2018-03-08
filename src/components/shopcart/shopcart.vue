@@ -6,7 +6,7 @@
               <span class="count" v-if="selectedCount !== 0">{{ selectedCount }}</span>
           </div>
           <div class="desc-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''">
-              <p class="total" v-if="selectedCount">¥{{ selectedTotal }}</p>
+              <p class="total" v-if="selectedCount"><span style="margin-right: 3px">¥</span>{{ selectedTotal }}</p>
               <p class="note">另需{{ poi.shipping_fee_tip }}</p>
           </div>
       </div>
@@ -21,60 +21,34 @@
 export default {
     props: {
         poi: {
-            type: Object,
-            default: {}
+            type: Object
         },
-        // selectedItems: {
-        //     type: Array,
-        //     default() {[
-                    // {
-                    //     price: 15,
-                    //     count: 3
-                    // },
-                    // {
-                    //     price: 10,
-                    //     count: 1
-                    // },
-                    // {
-                    //     price: 25,
-                    //     count: 2
-                    // }
-        //     ]}
-        // }
+        selectedItems: {
+            type: Array
+        }
   },
   data() {
       return {
-          selectedItems: [
-            {
-                price: 15,
-                count: 3
-            },
-            {
-                price: 10,
-                count: 0
-            },
-            {
-                price: 25,
-                count: 0
-            }
-          ]
+        //   
       }
   },
   computed: {
       selectedTotal() {
           let total = 0;
-          this.selectedItems.forEach(item => {
-              total += item.price * item.count;
-          });
-
+          if(this.selectedItems.length) {
+            this.selectedItems.forEach(item => {
+                total += item.min_price * item.count;
+            });
+          }
           return total;
       },
       selectedCount() {
           let count = 0;
-          this.selectedItems.forEach(item => {
-              count += item.count;
-          });
-
+          if(this.selectedItems.length) {
+            this.selectedItems.forEach(item => {
+                count += item.count;
+            });              
+          }
           return count;
       }
   }
