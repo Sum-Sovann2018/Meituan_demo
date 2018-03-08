@@ -10,11 +10,12 @@
 import AppHeader from '@/components/header/header'
 import AppNav from '@/components/nav/nav'
 
+
 export default {
   name: 'App',
   components: {
     AppHeader,
-    AppNav
+    AppNav,
   },
   data() {
     return {

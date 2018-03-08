@@ -60,6 +60,9 @@
         </li>
       </ul>
     </div>
+
+    <!-- shopcart组件 -->
+    <Shopcart :poi="poi_info"></Shopcart>
   </div>
 </template>
 
@@ -67,12 +70,19 @@
 // 导入better-scroll
 import BScroll from 'better-scroll';
 
+// 导入shopcart组件
+import Shopcart from '@/components/shopcart/shopcart'
+
 export default {
+  components: {
+    Shopcart,
+  },
   data() {
     return {
       // init objs to save data
       food_spu: {},
       promo: {},
+      poi_info: {},
       // DOM Cache
       foodItemsList: {},
       navItemsList:{},
@@ -164,8 +174,9 @@ export default {
         if(sourceData.code == 0) {
           that.food_spu = sourceData.data.food_spu_tags;
           that.promo = sourceData.data.container_operation_source;
+          that.poi_info = sourceData.data.poi_info;
 
-          // console.log(that.food_spu);
+          // console.log(that.poi_info);
 
           // 为了确保DOM已经完全渲染, 在$nextTick的回调函数中加载BScroll初始项.
           that.$nextTick(() => {
