@@ -9,11 +9,12 @@
             {{ promo.tag_name }}
           </p>
         </li>
-        <li class="item nav-item-hook" v-for="(item, index) in food_spu" :key="item.id" :class="activeMenuIndex === index + 1? 'active' : ''" @click="scrollToPosition(index + 1)">
+        <li class="item nav-item-hook" v-for="(category, index) in food_spu" :key="category.id" :class="activeMenuIndex === index + 1? 'active' : ''" @click="scrollToPosition(index + 1)">
           <p>
-            <img :src="item.icon" class="icon" v-if="item.icon"/>
-            {{ item.name }}
+            <img :src="category.icon" class="icon" v-if="category.icon"/>
+            {{ category.name }}
           </p>
+          <span class="indicator" v-show="categorySelectedFoodsCount(category) > 0">{{ categorySelectedFoodsCount(category) }}</span>
         </li>
       </ul>
     </div>
@@ -164,6 +165,15 @@ export default {
         }
       }
     },
+    categorySelectedFoodsCount(category) {
+      let count = 0;
+      category.spus.forEach(item => {
+        if(item.count) {
+          count += item.count;
+        }
+      });
+      return count;
+    }
   },
   computed: {
     // 
@@ -179,7 +189,7 @@ export default {
           });
         });
       }
-      
+
       return foods;
     }
   },
@@ -278,6 +288,22 @@ export default {
           height: 16px;
           vertical-align: text-top;
         }
+      }
+
+      .indicator {
+        display: block;
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        width: 17px;
+        height: 17px;
+        line-height: 17px;
+        transform: translateY(-50%);
+        background: #ffbb22;
+        color: #333333;
+        font-size: 12px;
+        border-radius: 50%;
+        text-align: center;
       }
 
     }
