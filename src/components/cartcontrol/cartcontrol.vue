@@ -18,8 +18,7 @@ import Vue from 'vue';
 export default {
     props: {
         food: {
-            type: Object,
-            // default: {}
+            type: Object
         }
     },
     methods: {
@@ -29,9 +28,13 @@ export default {
             } else {
                 Vue.set(this.food, 'count', 1);
             }
+
+            console.log(this.food.count);
         },
         subQuan() {
             this.food.count--;
+
+            console.log(this.food.count);
         }
     }
 

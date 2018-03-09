@@ -65,7 +65,7 @@
     </div>
 
     <!-- shopcart组件 -->
-    <Shopcart :poi="poi_info" :selectedItems="selectedFoods"></Shopcart>
+    <Shopcart :poi="poi_info" :foods="food_spu"></Shopcart>
   </div>
 </template>
 
@@ -86,7 +86,7 @@ export default {
   data() {
     return {
       // init objs to save data
-      food_spu: {},
+      food_spu: [],
       promo: {},
       poi_info: {},
       // DOM Cache
@@ -176,22 +176,7 @@ export default {
     }
   },
   computed: {
-    // 
-    selectedFoods() {
-      let foods = [];
-      
-      if(this.food_spu.length) {
-        this.food_spu.forEach(category => {
-          category.spus.forEach(item => {
-            if(item.count) {
-              foods.push(item);
-            }
-          });
-        });
-      }
-
-      return foods;
-    }
+  
   },
   created() {
     // 后台加载数据
