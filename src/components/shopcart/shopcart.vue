@@ -1,7 +1,7 @@
 <template>
   <div class="shopcart" :class="selectedCount !== 0 ? 'highlight' : ''">
       <div class="left-wrapper">
-          <div class="icon-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''" @click="openList">
+          <div class="icon-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''" @click="toggleList">
               <span class="icon mt-shopping_cart"></span>
               <span class="count" v-if="selectedCount !== 0">{{ selectedCount }}</span>
           </div>
@@ -34,7 +34,7 @@
                             <p class="unit">{{ item.unit }}</p>
                         </div>
                         <div class="price"><span style="margin-right: 3px">¥</span>{{ item.min_price }}</div>
-                        <CartControl class="controls" :food="item"></CartControl>
+                        <CartControl class="controls" :food="item" v-on:addOne="item.count++" v-on:subOne="item.count--"></CartControl>
                     </li>
                 </ul>
             </div>
@@ -43,7 +43,7 @@
         </transition>
 
         <transition name="fade">
-        <div class="bg-mask" v-show="showShopcartList"></div>
+        <div class="bg-mask" v-if="showShopcartList" @click="toggleList"></div>
         </transition>
       </div>
   </div>
@@ -66,23 +66,31 @@ export default {
         poi: {
             type: Object
         },
-        selectedItems: {
-            type: Array
-        },
         foods: {
-            type: Array
-        }
+            type: Array,
+            default: []
+        },    
   },
   data() {
       return {
-        selectedItemsListWrapper: {},
         showShopcartList: false,
+        BScrollWrapper: {}
       }
   },
   methods: {
-      openList() {
-          this.showShopcartList = !this.showShopcartList;
-          this.initListScroll();
+      toggleList() {
+          let that = this;
+
+          that.showShopcartList = !that.showShopcartList;
+          
+          // init or refresh better scroll
+          that.$nextTick(() => {
+              if(Object.keys(that.BScrollWrapper).length) {
+                that.refreshScroll();
+            } else {
+                that.initListScroll();
+            }
+          }) 
       },
       clearList() {
           this.selectedFoods.forEach(item => {
@@ -91,11 +99,17 @@ export default {
       },
       initListScroll() {
           let list = this.$refs.listWrapper;
-
-          this.selectedItemsListWrapper = new BScroll(list, {
+          
+          console.log(list);
+          this.BScrollWrapper = new BScroll(list, {
               type: 3,
               click: true,
           });
+
+          console.log(this.BScrollWrapper);
+      },
+      refreshScroll() {
+          this.BScrollWrapper.refresh();
       }
   },
   computed: {
@@ -129,8 +143,6 @@ export default {
           });
         });
       }
-
-      console.log("running", foods);
       return foods;
      },
   }

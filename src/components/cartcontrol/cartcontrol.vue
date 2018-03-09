@@ -1,10 +1,10 @@
 <template>
   <div class="control-wrapper">
-      <div class="decrease" v-show="this.food.count > 0" @click="subQuan">
+      <div class="decrease" v-show="selectedFood.count > 0" @click="subQuan">
           <span class="mt-remove_circle_outline"></span>
       </div>
-      <div class="quantity" v-show="this.food.count > 0">
-          <span>{{ this.food.count }}</span>
+      <div class="quantity" v-show="selectedFood.count > 0">
+          <span>{{ selectedFood.count }}</span>
       </div>
       <div class="increase" @click="addQuan">
           <span class="mt-add_circle"></span>
@@ -21,20 +21,21 @@ export default {
             type: Object
         }
     },
+    data() {
+        return{
+            selectedFood: this.food
+        }
+    },
     methods: {
         addQuan() {
-            if(this.food.count) {
-                this.food.count++;
+            if(this.selectedFood.count) {
+                this.selectedFood.count++;
             } else {
-                Vue.set(this.food, 'count', 1);
+                Vue.set(this.selectedFood, 'count', 1);
             }
-
-            console.log(this.food.count);
         },
         subQuan() {
-            this.food.count--;
-
-            console.log(this.food.count);
+            this.selectedFood.count--;
         }
     }
 
