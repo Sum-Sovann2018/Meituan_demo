@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Meituan';
-  src:  url('../fonts/Meituan.eot?bc38qt');
-  src:  url('../fonts/Meituan.eot?bc38qt#iefix') format('embedded-opentype'),
-    url('../fonts/Meituan.ttf?bc38qt') format('truetype'),
-    url('../fonts/Meituan.woff?bc38qt') format('woff'),
-    url('../fonts/Meituan.svg?bc38qt#Meituan') format('svg');
+  src:  url('../fonts/Meituan.eot?grty9');
+  src:  url('../fonts/Meituan.eot?grty9#iefix') format('embedded-opentype'),
+    url('../fonts/Meituan.ttf?grty9') format('truetype'),
+    url('../fonts/Meituan.woff?grty9') format('woff'),
+    url('../fonts/Meituan.svg?grty9#Meituan') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -57,12 +57,12 @@
 .mt-search:before {
   content: "\e986";
 }
-.mt-star-empty:before {
-  content: "\e9d7";
+.mt-bin:before {
+  content: "\e9ac";
 }
-.mt-star-half:before {
-  content: "\e9d8";
+.mt-share:before {
+  content: "\ea7d";
 }
-.mt-star-full:before {
-  content: "\e9d9";
+.mt-share2:before {
+  content: "\ea82";
 }
