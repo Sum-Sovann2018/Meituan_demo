@@ -1,7 +1,8 @@
 <template>
   <div class="header">
-      <!-- {{ poi.name }} -->
+      <!-- 背景图片 -->
       <div class="bg" :style="getBgUrl"></div>
+
       <!-- 顶部通栏 -->
       <div class="top-wrapper">
         <div class="left-wrapper">
@@ -43,6 +44,7 @@
       </div>
 
       <!-- 公告通知 -->
+      <!-- 添加fade过度效果 -->
       <transition name="fade">
       <div class="modal-wrapper" v-show="this.modalToggled">
           <div class="modal" :style="getModalBgUrl">
@@ -87,23 +89,32 @@
 
 <script>
 export default {
+  // 定义props属性
+	// 从父组件接收poi_info的对象, 并在本地生成一个poi指针
+	// 同时可以对传递来的对象进行验证, 定义其类型,以及初始值
   props: {
       poi: {
           type: Object,
           default: {}
       }
   },
+	// 声明本地属性
   data() {
       return {
           modalToggled: false,
           isMarked: false
       }
   },
+	// 声明本地方法
   methods: {
       toggleModal() {
           return this.modalToggled = !this.modalToggled;
       }
   },
+	// 声明本地计算属性
+	// 计算属性在这里的作用是
+	// 1. 直接处理传递对象里的内容,并返回处理后的数据
+	// 2. 处理后的数据是被cache的,所以只要原始数据不发生改变,计算属性的值是直接从cache里读取,不需要再次进行计算
   computed: {
       getBgUrl() {
           return `background-image: url("${ this.poi.head_pic_url }")`;

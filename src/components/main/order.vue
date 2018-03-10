@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="order-page">
     <!-- 左边导航边栏 -->
     <div class="side-nav" ref="orderSideNav">
       <ul class="nav">
@@ -83,20 +83,21 @@ import CartControl from "@/components/cartcontrol/cartcontrol";
 import Food from "@/components/food/food";
 
 export default {
+  // 声明本地子组件
   components: {
     Shopcart,
     CartControl,
     Food,
   },
-
+  // 定义本地属性
   data() {
     return {
-      // init objs to save data
-      food_spu: [],
-      promo: {},
-      poi_info: {},
+      // 用于存储后台数据的初始对象
+      food_spu: [], //食品分类及对应分类包含的食品
+      promo: {},    //专场信息
+      poi_info: {}, //商家信息
       // DOM Cache
-      foodItemsList: {},
+      foodCategoryList: {},
       navItemsList: {},
       clickedFood: {},
       // init objs to save better-scroll objs
@@ -112,9 +113,12 @@ export default {
   },
 
   methods: {
+    // 获取food list item里面的食品图片
     getFoodImgUrl(item) {
       return `background-image: url("${item.picture}")`;
     },
+
+    // 点击food item并打开food component页面
     clickThis(item) {
       this.clickedFood = item;
 
@@ -122,23 +126,35 @@ export default {
       // access the method on child component
       this.$refs.clickedFood.showItem();
     },
+
+    // 重置被选中的food item
     resetClickedFood() {
       this.clickedFood = {};
     },
+
+    // 初始化better-scroll
+    // 必须初始化才能实现滚动
     initScroll() {
+      // 通过$refs属性来获取DOM元素,这里获取的需要使用better-scroll元素的父级元素
+      // 根据better-scroll的规则, scroll会作用于该父级元素的第一个子元素
+      // div.parentWrapper
+      // ..div.firstElelemt   --->只有第一个元素会实现better-scroll效果
+      // ..div.otherElements
       let sideNav = this.$refs.orderSideNav;
       let contentWrapper = this.$refs.orderContentWrapper;
 
-      // Cache DOM
-      this.foodItemsList = contentWrapper.getElementsByClassName(
+      // 把DOM list 元素保存到对应的本地属性
+      // 用于给其他方法提供或者判定index, 来实现左右联动的效果
+      this.foodCategoryList = contentWrapper.getElementsByClassName(
         "list-item-hook"
       );
       this.navItemsList = sideNav.getElementsByClassName("nav-item-hook");
 
       // 初始化BS实例
+      // 把实例储存为本地属性
       this.menuScroll = new BScroll(sideNav, {
-        probeType: 3,
-        click: true
+        probeType: 3, //滑动以及动态滚动(momentum)时, 都会被计算
+        click: true   //可被点击
       });
       this.foodScroll = new BScroll(contentWrapper, {
         probeType: 3,
@@ -146,6 +162,7 @@ export default {
       });
 
       // 绑定scroll事件
+      // 搭档scroll触发时,对应的callback
       this.menuScroll.on("scroll", pos => {
         this.menuScrollY = Math.abs(Math.round(pos.y));
       });
@@ -160,25 +177,33 @@ export default {
         ); // 减3为了保持之前元素的可视
       });
     },
+
+    // 计算出右边每个food category的DOM的clientHeight,并添加到heightRnages属性
+    // 用于根据右边的滚动范围,判断左边对应的side nav item
     calcListItemHeightRanges() {
       let heightRange = 0;
-
-      if (!this.foodItemsList.length) return;
-
-      // iterate the list and get the clientHeight of each item
-      for (let i = 0; i < this.foodItemsList.length; i++) {
-        let elemHeight = this.foodItemsList[i].clientHeight;
-        heightRange += elemHeight;
-        // save to heightRanges list
-        this.heightRnages.push(heightRange);
+      if (this.foodCategoryList.length) {
+        // iterate the list and get the clientHeight of each item
+        for (let i = 0; i < this.foodCategoryList.length; i++) {
+          let elemHeight = this.foodCategoryList[i].clientHeight;
+          heightRange += elemHeight;
+          // save to heightRanges list
+          this.heightRnages.push(heightRange);
+        }
       }
     },
+
+    // 滚动到指定的food category
+    // 实现点击左边side nav, 右侧自动滚动到对应的food category
     scrollToPosition(index) {
-      // 使用better-scroll的scrollToElement方法
-      this.foodScroll.scrollToElement(this.foodItemsList[index], 0);
+      // 使用better-scroll的scrollToElement方法, 过度时长定义为0, 瞬时切换
+      this.foodScroll.scrollToElement(this.foodCategoryList[index], 0);
       // used for active menu class
       this.activeMenuIndex = index;
     },
+
+    // 根据右边商品区的滚动范围,计算左边side nav item list对应item的index
+    // 实现左右部分的联动效果,滚动右边,自动选中左边对应的side nav item
     getScrollToIndex() {
       for (let i = 0; i < this.heightRnages.length - 1; i++) {
         if (
@@ -190,6 +215,9 @@ export default {
         }
       }
     },
+
+    // 计算指定category被选中item的个数
+    // 用于显示side nav的选中商品的个数
     categorySelectedFoodsCount(category) {
       let count = 0;
       category.spus.forEach(item => {
@@ -201,8 +229,9 @@ export default {
     }
   },
 
+  // 在create钩子处使用$axios后台加载数据
+  // 并且初始化better-scroll
   created() {
-    // 后台加载数据
     let that = this;
 
     that.$axios
@@ -214,8 +243,6 @@ export default {
           that.food_spu = sourceData.data.food_spu_tags;
           that.promo = sourceData.data.container_operation_source;
           that.poi_info = sourceData.data.poi_info;
-
-          // console.log(that.poi_info);
 
           // 为了确保DOM已经完全渲染, 在$nextTick的回调函数中加载BScroll初始项.
           that.$nextTick(() => {

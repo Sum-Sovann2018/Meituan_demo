@@ -1,51 +1,51 @@
 <template>
   <div class="shopcart" :class="selectedCount !== 0 ? 'highlight' : ''">
-      <div class="left-wrapper">
-          <div class="icon-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''" @click="toggleList">
-              <span class="icon mt-shopping_cart"></span>
-              <span class="count" v-if="selectedCount !== 0">{{ selectedCount }}</span>
-          </div>
-          <div class="desc-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''">
-              <p class="total" v-if="selectedCount"><span style="margin-right: 3px">¥</span>{{ selectedTotal }}</p>
-              <p class="note">另需{{ poi.shipping_fee_tip }}</p>
-          </div>
+    <div class="left-wrapper">
+      <div class="icon-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''" @click="toggleList">
+        <span class="icon mt-shopping_cart"></span>
+        <span class="count" v-if="selectedCount !== 0">{{ selectedCount }}</span>
       </div>
-      <div class="right-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''">
-          <p>{{ selectedCount !== 0 ? '去结算' : poi.min_price_tip}}</p>
+      <div class="desc-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''">
+        <p class="total" v-if="selectedCount"><span style="margin-right: 3px">¥</span>{{ selectedTotal }}</p>
+        <p class="note">另需{{ poi.shipping_fee_tip }}</p>
       </div>
+    </div>
+    <div class="right-wrapper" :class="selectedCount !== 0 ? 'highlight' : ''">
+      <p>{{ selectedCount !== 0 ? '去结算' : poi.min_price_tip}}</p>
+    </div>
 
-      <!-- pop-up content list -->
-      <div class="shoprcart-list-wrapper">
-        <transition name="fade">
-        <div class="shopcart-list" v-show="showShopcartList">
-            <div class="list-top">打折活动详情</div>
-            <div class="list-head">
-                <div class="left">1号口袋</div>
-                <div class="right" @click="clearList">
-                    <span class="icon mt-shopping_cart"></span>
-                    <span>清空购物车</span>
-                </div>
-            </div>
-            <div class="list-body" ref="listWrapper">
-                <ul>
-                    <li class="items" v-for="item in selectedFoods" v-if="item.count" :key="item.id">
-                        <div class="info">
-                            <p class="name">{{ item.name }}</p>
-                            <p class="unit">{{ item.unit }}</p>
-                        </div>
-                        <div class="price"><span style="margin-right: 3px">¥</span>{{ item.min_price }}</div>
-                        <CartControl class="controls" :food="item" v-on:addOne="item.count++" v-on:subOne="item.count--"></CartControl>
-                    </li>
-                </ul>
-            </div>
-            <div class="list-foot"></div>
+    <!-- pop-up content list -->
+    <div class="shoprcart-list-wrapper">
+      <transition name="fade">
+      <div class="shopcart-list" v-show="showShopcartList">
+        <div class="list-top">{{ poi.discounts2[0].info }}</div>
+        <div class="list-head">
+          <div class="left">1号口袋</div>
+          <div class="right" @click="clearList">
+            <span class="icon mt-bin"></span>
+            <span>清空购物车</span>
+          </div>
         </div>
-        </transition>
-
-        <transition name="fade">
-        <div class="bg-mask" v-if="showShopcartList" @click="toggleList"></div>
-        </transition>
+        <div class="list-body" ref="listWrapper">
+          <ul>
+            <li class="items" v-for="item in selectedFoods" v-if="item.count" :key="item.id">
+              <div class="info">
+                <p class="name">{{ item.name }}</p>
+                <p class="unit">{{ item.unit }}</p>
+              </div>
+              <div class="price"><span style="margin-right: 3px">¥</span>{{ item.min_price }}</div>
+              <CartControl class="controls" :food="item"></CartControl>
+            </li>
+          </ul>
+        </div>
+        <div class="list-foot"></div>
       </div>
+      </transition>
+
+      <transition name="fade">
+      <div class="bg-mask" v-if="showShopcartList" @click="toggleList"></div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -90,7 +90,7 @@ export default {
         if (Object.keys(that.BScrollWrapper).length) {
           that.refreshScroll();
         } else {
-          that.initListScroll();
+          that.initScroll();
         }
       });
     },
@@ -99,7 +99,7 @@ export default {
         item.count = 0;
       });
     },
-    initListScroll() {
+    initScroll() {
       let list = this.$refs.listWrapper;
 
       this.BScrollWrapper = new BScroll(list, {
