@@ -31,9 +31,9 @@
         
         <!-- 分类内容 -->
         <li class="cate-item list-item-hook" v-for="category in food_spu" :key="category.id">
-          <h3 class="cate-header">{{category.name}}</h3>
+          <h3 class="cate-header">{{ category.name }}</h3>
           <ul>
-            <li class="food-item" v-for="item in category.spus" :key="item.id" @click="getTargetedFood(item)">
+            <li class="food-item" v-for="item in category.spus" :key="item.id" @click="clickThis(item)">
               <div class="food-image" :style="getFoodImgUrl(item)"></div>
               <div class="food-info">
                 <h1 class="title">{{ item.name }}</h1>
@@ -68,7 +68,7 @@
     <Shopcart :poi="poi_info" :foods="food_spu"></Shopcart>
 
     <!-- food组件 -->
-    <Food :food="targetedFood" ref="targetedFood"></Food>
+    <Food :food="clickedFood" ref="clickedFood" v-on:itemclosed="resetClickedFood"></Food>
   </div>
 </template>
 
@@ -98,7 +98,7 @@ export default {
       // DOM Cache
       foodItemsList: {},
       navItemsList: {},
-      targetedFood: {},
+      clickedFood: {},
       // init objs to save better-scroll objs
       foodScroll: {},
       menuScroll: {},
@@ -115,12 +115,15 @@ export default {
     getFoodImgUrl(item) {
       return `background-image: url("${item.picture}")`;
     },
-    getTargetedFood(item) {
-      this.targetedFood = item;
+    clickThis(item) {
+      this.clickedFood = item;
 
       // open item page
       // access the method on child component
-      this.$refs.targetedFood.openItem();
+      this.$refs.clickedFood.showItem();
+    },
+    resetClickedFood() {
+      this.clickedFood = {};
     },
     initScroll() {
       let sideNav = this.$refs.orderSideNav;

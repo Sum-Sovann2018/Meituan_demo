@@ -1,27 +1,27 @@
 <template>
-  <div class="food-conatiner" v-show="viewItem" ref="BSWrapper"> 
+  <div class="food-conatiner" v-if="viewItem" ref="BSWrapper"> 
     <div class="scroll-wrapper">
       <!-- food infomation -->
       <div class="food-wrapper">
         <div class="food-content">
           <div class="food-img">
-            <img :src="food.picture" alt="">
+            <img :src="currentFood.picture" alt="">
           </div>
           <div class="food-info">
-            <div class="name">{{ food.name }}</div>
-            <div class="desc" if="food.description">{{ food.description }}</div>
-            <div class="sales">{{ food.month_saled_content }}</div>
-            <div class="hot-pick" v-if="food.product_label_picture">
-              <img :src="food.product_label_picture" />
+            <div class="name">{{ currentFood.name }}</div>
+            <div class="desc" v-if="currentFood.description">{{ currentFood.description }}</div>
+            <div class="sales">{{ currentFood.month_saled_content }}</div>
+            <div class="hot-pick" v-if="currentFood.product_label_picture">
+              <img :src="currentFood.product_label_picture" />
             </div>
             <div class="price">
               <div class="left">
-                <span>¥{{ food.min_price }}</span>
-                <span>/{{ food.unit }}</span>
+                <span>¥{{ currentFood.min_price }}</span>
+                <span>/{{ currentFood.unit }}</span>
               </div>
-              <div class="right" v-if="!selected" @click="selectThis(food)">选择</div>
+              <div class="right" v-if="!selected" @click="selectThis(currentFood)">选择</div>
               <!-- carcontrol 组件 -->
-              <CartControl class="cartcontrols" :food="food" v-if="selected"></CartControl>
+              <CartControl class="cartcontrols" :food="currentFood" v-if="selected"></CartControl>
             </div>
           </div>
         </div>
@@ -40,7 +40,8 @@
 
         <ul class="comments-content" v-if="food.rating">
           <li class="comment" v-for="comment in food.rating.comment_list" :key="comment.id">
-            <div class="avatar" :style="getUserAvatarUrl(comment)"></div>
+            <div class="avatar" :style="getUserAvatarUrl(comment)" v-if="comment.user_icon"></div>
+            <div class="avatar-default" v-if="!comment.user_icon"></div>
             <div class="info">
               <div class="details">
                 <div class="username">{{ comment.user_name }}</div>
@@ -97,7 +98,7 @@ export default {
   },
 
   methods: {
-    openItem() {
+    showItem() {
       this.viewItem = true;
 
       // init BScroll
@@ -107,6 +108,7 @@ export default {
     },
     closeItem() {
       this.viewItem = false;
+      this.$emit('itemclosed');
     },
     selectThis(item) {
       if(!item.count) {
@@ -114,7 +116,8 @@ export default {
       }
     },
     getUserAvatarUrl(item) {
-      return `background-image: url("${item.user_icon ? item.user_icon : ''}")`;
+      let url = item.user_icon ? item.user_icon : '';
+      return `background-image: url("${url}")`;
     },
     initScroll() {
       let list = this.$refs.BSWrapper;
@@ -127,8 +130,11 @@ export default {
   },
 
   computed: {
+    currentFood() {
+      return this.food;
+    },
     selected() {
-      if(!this.food.count) {
+      if(!this.currentFood.count) {
         return false; 
       } else {
         return true;
@@ -329,17 +335,22 @@ export default {
     padding: 10px;
 
     li.comment {
-      padding: 5px 0;
+      padding: 10px 0;
+      border-bottom: 1px solid #f4f4f4;
 
-      .avatar {
+      .avatar,
+      .avatar-default {
         float: left;
         width: 41px;
         height: 41px;
         margin-right: 10px;
         background-size: cover;
         background-position: center;
-        background-color: #9d9d9d;
         border-radius: 50%;
+      }
+
+      .avatar-default {
+        background-image: url("./anonymity.png");
       }
 
       .info {
