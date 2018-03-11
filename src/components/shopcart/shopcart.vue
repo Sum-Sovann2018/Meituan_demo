@@ -19,7 +19,7 @@
       <transition name="fade">
       <div class="shopcart-list" v-show="showShopcartList">
         <div class="list-top" v-if="poi.discounts2">
-          <img :src="this.poi.discounts2[0].icon_url" />
+          <img :src="poi.discounts2[0].icon_url" />
           <span>{{ poi.discounts2[0].info }}</span>
         </div>
         <div class="list-head">
