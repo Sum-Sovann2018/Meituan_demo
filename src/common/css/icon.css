@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'Meituan';
-  src:  url('../fonts/Meituan.eot?grty9');
-  src:  url('../fonts/Meituan.eot?grty9#iefix') format('embedded-opentype'),
-    url('../fonts/Meituan.ttf?grty9') format('truetype'),
-    url('../fonts/Meituan.woff?grty9') format('woff'),
-    url('../fonts/Meituan.svg?grty9#Meituan') format('svg');
+  src:  url('../fonts/Meituan.eot?kr7jjd');
+  src:  url('../fonts/Meituan.eot?kr7jjd#iefix') format('embedded-opentype'),
+    url('../fonts/Meituan.ttf?kr7jjd') format('truetype'),
+    url('../fonts/Meituan.woff?kr7jjd') format('woff'),
+    url('../fonts/Meituan.svg?kr7jjd#Meituan') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -54,11 +54,53 @@
 .mt-thumb_up:before {
   content: "\e909";
 }
+.mt-home:before {
+  content: "\e90a";
+}
+.mt-pencil:before {
+  content: "\e90b";
+}
+.mt-compass:before {
+  content: "\e949";
+}
 .mt-search:before {
   content: "\e986";
 }
 .mt-bin:before {
   content: "\e9ac";
+}
+.mt-list:before {
+  content: "\e9ba";
+}
+.mt-menu:before {
+  content: "\e9bd";
+}
+.mt-star-empty:before {
+  content: "\e9d7";
+}
+.mt-star-half:before {
+  content: "\e9d8";
+}
+.mt-star-full:before {
+  content: "\e9d9";
+}
+.mt-plus:before {
+  content: "\ea0a";
+}
+.mt-minus:before {
+  content: "\ea0b";
+}
+.mt-cross:before {
+  content: "\ea0f";
+}
+.mt-checkmark:before {
+  content: "\ea10";
+}
+.mt-checkmark2:before {
+  content: "\ea11";
+}
+.mt-radio-unchecked:before {
+  content: "\ea56";
 }
 .mt-share:before {
   content: "\ea7d";

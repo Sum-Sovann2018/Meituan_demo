@@ -18,7 +18,10 @@
     <div class="shoprcart-list-wrapper">
       <transition name="fade">
       <div class="shopcart-list" v-show="showShopcartList">
-        <div class="list-top">{{ poi.discounts2[0].info }}</div>
+        <div class="list-top" v-if="poi.discounts2">
+          <img :src="this.poi.discounts2[0].icon_url" />
+          <span>{{ poi.discounts2[0].info }}</span>
+        </div>
         <div class="list-head">
           <div class="left">1号口袋</div>
           <div class="right" @click="clearList">
@@ -310,6 +313,17 @@ export default {
       color: #646158;
       font-size: 12px;
       background: #f3e6c6;
+
+      img {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+        vertical-align: middle;
+      }
+
+      span {
+        vertical-align: middle;
+      }
     }
     .list-head {
       position: absolute;
