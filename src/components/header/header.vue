@@ -57,9 +57,9 @@
 					<div class="shipping-wrapper">
 						<div class="shipping-info">
 							<span>{{ poi.min_price_tip }}</span>
-							<span class="divider"></span>
+							<span class="bar"></span>
 							<span>{{ poi.shipping_fee_tip }}</span>
-							<span class="divider"></span>
+							<span class="bar"></span>
 							<span>{{ poi.delivery_time_tip }}</span>
 						</div>
 						<div class="shipping-schedule">
@@ -424,7 +424,7 @@ export default {
 						font-weight: 300;
 					}
 
-					.divider {
+					.bar {
 						width: 6px;
 						
 						&::after {

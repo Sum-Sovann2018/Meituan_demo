@@ -32,7 +32,10 @@
           <ul v-if="tabs.length">
             <li class="tab-item" :class="activeTab === 'ALL'? 'active' : ''" @click="clickedTab(0)">{{ tabs[0].comment_score_title }}</li>
             <li class="tab-item" :class="activeTab === 'PIC'? 'active' : ''" @click="clickedTab(1)">{{ tabs[1].comment_score_title }}</li>
-            <li class="tab-item" :class="activeTab === 'DP'? 'active' : ''" @click="clickedTab(2)">{{ tabs[2].comment_score_title }}</li>
+            <li class="tab-item" :class="activeTab === 'DP'? 'active' : ''" @click="clickedTab(2)">
+              <span class="dp_icon" :class="activeTab === 'DP'? 'dp_icon_active' : 'dp_icon'"></span>
+              {{ tabs[2].comment_score_title }}
+            </li>
           </ul>
         </div>
 
@@ -281,8 +284,8 @@ export default {
       
       .tab-item {
         flex: 1;
-        padding: 11px;
-        font-size: 14px;
+        padding: 10px;
+        font-size: 12px;
         color: #ffb000;
         text-align: center;
         background: #fff;
@@ -301,6 +304,26 @@ export default {
         &.active {
           color: #333333;
           background: #ffb000;
+        }
+
+        .dp_icon,
+        .dp_icon_active {
+          display: inline-block;
+          // margin-right: 5px;
+          width: 15px;
+          height: 15px;
+          background-position: center;
+          background-size: contain;
+          background-repeat: no-repeat;
+          vertical-align: middle;
+        }
+
+        .dp_icon {
+          background-image: url('/static/img/icon_sub_tab_dp_normal@2x.png');
+        }
+
+        .dp_icon_active {
+          background-image: url('/static/img/icon_sub_tab_dp_highlighted@2x.png');
         }
       }
     }

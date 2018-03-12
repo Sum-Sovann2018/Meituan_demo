@@ -6,7 +6,9 @@
     <!-- Navi Section -->
     <AppNav :commentCount="commentCount"></AppNav>
     <!-- Main Content Section -->
-    <router-view class="main"></router-view>
+    <keep-alive>
+      <router-view class="main"></router-view>
+    </keep-alive>
   </div>
 </template>
 
