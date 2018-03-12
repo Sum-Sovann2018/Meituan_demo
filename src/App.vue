@@ -4,7 +4,7 @@
     <!-- 向AppHeader组件传递poi_info对象 -->
     <AppHeader :poi="poi_info"></AppHeader>
     <!-- Navi Section -->
-    <AppNav></AppNav>
+    <AppNav :commentCount="commentCount"></AppNav>
     <!-- Main Content Section -->
     <router-view class="main"></router-view>
   </div>
@@ -26,7 +26,8 @@ export default {
   // 声明本地属性
   data() {
     return {
-      poi_info: {}
+      poi_info: {},
+      commentCount: 0,
     };
   },
 
@@ -49,6 +50,20 @@ export default {
       .catch(error => {
         console.log(error);
       });
+
+    // 后台加载数据
+    that.$axios
+      .get("/api/rating")
+      .then(response => {
+        let sourceData = response.data;
+
+        if (sourceData.code == 0) {
+          that.commentCount = sourceData.data.comment_num;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 };
 </script>
@@ -58,7 +73,6 @@ export default {
 @import url("./common/css/icon.css");
 
 .main {
-  display: flex;
   position: absolute;
   width: 100%;
   top: 201px;

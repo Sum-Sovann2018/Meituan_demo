@@ -1,7 +1,7 @@
 <template>
   <div class="stars-wrapper">
 		<div class="stars" v-html="starsHtml"></div>
-		<div class="score">{{ this.score }}</div>
+		<div class="score">{{ score }}</div>
 	</div>
 </template>
 

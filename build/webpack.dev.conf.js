@@ -15,7 +15,7 @@ const PORT = process.env.PORT && Number(process.env.PORT)
 
 // 本地数据读取
 const Appdata_Order = require('../data/order.json');
-const Appdata_Comment = require('../data/comment.json');
+const Appdata_Rating = require('../data/rating.json');
 const Appdata_Seller = require('../data/seller.json');
 
 // 配置API服务器
@@ -59,8 +59,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       app.get('/api/order', (req, res) => {
         res.json(Appdata_Order);
       });
-      app.get('/api/comment', (req, res) => {
-        res.json(Appdata_Comment);
+      app.get('/api/rating', (req, res) => {
+        res.json(Appdata_Rating);
       });
       app.get('/api/seller', (req, res) => {
         res.json(Appdata_Seller);

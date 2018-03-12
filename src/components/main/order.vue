@@ -262,6 +262,10 @@ export default {
 </script>
 
 <style lang="scss">
+#order-page {
+  display: flex;
+}
+
 .side-nav {
   flex: 0 0 85px;
   position: relative;

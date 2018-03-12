@@ -3,7 +3,7 @@ import Router from 'vue-router'
 
 // load page component
 import OrderPage from '@/components/main/order'
-import CommentPage from '@/components/main/comment'
+import RatingPage from '@/components/main/rating'
 import SellerPage from '@/components/main/seller'
 
 Vue.use(Router)
@@ -20,9 +20,9 @@ export default new Router({
       component: OrderPage
     },
     {
-      path: '/comment',
-      name: 'comment',
-      component: CommentPage
+      path: '/rating',
+      name: 'rating',
+      component: RatingPage
     },
     {
       path: '/seller',
